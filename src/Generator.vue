@@ -46,11 +46,12 @@
 
       <div v-if="result.length">
         <el-divider></el-divider>
-        <ul>
+        <span>共计{{ result.length }}个</span>
+        <ul class="result-list">
           <li
             v-for="i in result"
             :key="i"
-            class="infinite-list-item">{{ i }}</li>
+            class="result-item">{{ i }}</li>
         </ul>
       </div>
     </el-form>
@@ -143,5 +144,15 @@ export default {
 <style lang="less" scoped>
   /deep/ .el-select {
     display: block;
+  }
+
+  .result-list {
+    max-height: 200px;
+    overflow-y: scroll;
+    border: 1px solid gray;
+  }
+
+  .result-item:nth-child(even) {
+    background: #eee;
   }
 </style>
