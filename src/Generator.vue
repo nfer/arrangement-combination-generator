@@ -4,17 +4,24 @@
       <template v-for="(source, idx) in sources">
         <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
           <el-row>
-            <el-col :span="22">
+            <el-col :span="18">
               <el-input v-model="sources[idx]"></el-input>
+            </el-col>
+            <el-col :span="3" :offset="1">
+              <span>可重复性：</span>
+              <el-switch v-model="sourceDupFlags[idx]"
+                active-color="#13ce66">
+              </el-switch>
             </el-col>
             <el-col :span="1" :offset="1" v-if="sources.length > 1">
               <el-button type="danger" icon="el-icon-delete" circle
-                @click="sources.splice(idx, 1)"></el-button>
+                @click="sources.splice(idx, 1);sourceDupFlags.splice(idx, 1)"></el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </template>
-      <el-button type="primary" round @click="sources.push('')">添加数据源</el-button>
+      <el-button type="primary" round @click="sources.push('');sourceDupFlags.push(true)">
+        添加数据源</el-button>
       <el-divider></el-divider>
 
       <template v-for="(step, idx) in steps">
@@ -63,6 +70,7 @@ export default {
   data() {
     return {
       sources: [''],
+      sourceDupFlags: [true],
       steps: [],
       form: {
       },
@@ -88,11 +96,12 @@ export default {
         const arr = [];
         result.forEach((p) => {
           data[s].forEach((c) => {
-            if (!p.includes(c)) {
-              const temp = [];
-              temp.push(c);
-              arr.push(p.concat(temp));
+            if (!this.sourceDupFlags[s] && p.includes(c)) {
+              return;
             }
+            const temp = [];
+            temp.push(c);
+            arr.push(p.concat(temp));
           });
         });
         result = arr;
