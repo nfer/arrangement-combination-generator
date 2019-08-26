@@ -83,16 +83,21 @@ export default {
       return result;
     },
     arrangementSteps(data) {
-      let result = [''];
+      let result = [[]];
       this.steps.forEach((s) => {
         const arr = [];
         result.forEach((p) => {
           data[s].forEach((c) => {
-            arr.push(`${p}${c}`);
+            if (!p.includes(c)) {
+              const temp = [];
+              temp.push(c);
+              arr.push(p.concat(temp));
+            }
           });
         });
         result = arr;
       });
+      result = result.map(item => item.join(''));
       return result;
     },
     checkSource() {
