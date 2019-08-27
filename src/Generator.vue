@@ -7,7 +7,7 @@
             <el-col :span="18">
               <el-input v-model="sources[idx]"></el-input>
             </el-col>
-            <el-col :span="3" :offset="1">
+            <el-col :span="3" :offset="1" v-if="steps.length">
               <span>可重复性：</span>
               <el-switch v-model="sourceDupFlags[idx]"
                 active-color="#13ce66">
