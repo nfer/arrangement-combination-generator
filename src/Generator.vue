@@ -35,7 +35,7 @@
                 </template>
               </el-select>
             </el-col>
-            <el-col :span="1" :offset="1" v-if="steps.length > 1">
+            <el-col :span="1" :offset="1">
               <el-button type="danger" icon="el-icon-delete" circle
                 @click="steps.splice(idx, 1);"></el-button>
             </el-col>
