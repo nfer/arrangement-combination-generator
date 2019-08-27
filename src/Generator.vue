@@ -166,6 +166,11 @@ export default {
     border: 1px solid gray;
   }
 
+  .result-item {
+    font-family: 'courier new', typewriter, matrix, monospace;
+    letter-spacing: 0.2em;
+  }
+
   .result-item:nth-child(even) {
     background: #eee;
   }
