@@ -43,6 +43,13 @@
         </el-form-item>
       </template>
       <el-button type="primary" round @click="steps.push(0)">添加步骤</el-button>
+      <el-button type="primary" round @click="processorFlag = !processorFlag">编辑处理函数</el-button>
+      <template v-if="processorFlag">
+        <el-divider></el-divider>
+        <el-input
+          type="textarea" :rows="5"
+          v-model="processor"></el-input>
+      </template>
       <el-divider></el-divider>
 
       <el-form-item>
@@ -75,6 +82,8 @@ export default {
       form: {
       },
       result: [],
+      processorFlag: false,
+      processor: 'args => args.join("")',
     };
   },
   methods: {
@@ -106,7 +115,9 @@ export default {
         });
         result = arr;
       });
-      result = result.map(item => item.join(''));
+      /* eslint-disable no-eval */
+      result = result.map(eval(this.processor));
+      /* eslint-enable no-eval */
       return result;
     },
     checkSource() {
@@ -147,6 +158,8 @@ export default {
       this.sources = [''];
       this.steps = [];
       this.result = '';
+      this.processor = 'args => args.join("")';
+      this.processorFlag = false;
     },
     onClear() {
       this.result = '';
