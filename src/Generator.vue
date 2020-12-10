@@ -42,7 +42,7 @@
           </el-row>
         </el-form-item>
       </template>
-      <el-button type="primary" round @click="steps.push(0)">添加步骤</el-button>
+      <el-button type="primary" round @click="addStep()">添加步骤</el-button>
       <el-button type="primary" round @click="processorFlag = !processorFlag">编辑处理函数</el-button>
       <template v-if="processorFlag">
         <el-divider></el-divider>
@@ -119,6 +119,10 @@ export default {
       result = result.map(eval(this.processor));
       /* eslint-enable no-eval */
       return result;
+    },
+    addStep() {
+      const last = Math.min(this.steps.length, this.sources.length - 1);
+      this.steps.push(last);
     },
     checkSource() {
       const data = [];
