@@ -1,10 +1,11 @@
 <template>
   <div class="hello">
     <el-form ref="form" :model="form" label-width="80px" label-position="left">
-      <el-button class="ope-btn" type="primary" round
-        @click="addSource">
-        添加数据源
-      </el-button>
+      <el-form-item label-width="0">
+        <el-button type="primary" round @click="addSource">添加数据源</el-button>
+        <el-button v-if="sourceObjs.length" type="danger" @click="sourceObjs = []">重置数据源</el-button>
+      </el-form-item>
+
       <div v-if="sourceObjs.length">
         <template v-for="(item, idx) in sourceObjs">
           <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
@@ -30,15 +31,16 @@
         </template>
         <el-divider></el-divider>
 
-        <el-button  class="ope-btn" type="primary" round
-          @click="addStep()">
-          添加步骤
-        </el-button>
+        <el-form-item label-width="0">
+          <el-button type="primary" round @click="addStep()">添加步骤</el-button>
+          <el-button v-if="steps.length" type="danger" @click="steps = []">重置步骤</el-button>
+        </el-form-item>
+
         <template v-for="(step, idx) in steps">
           <el-form-item :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
             <el-row>
               <el-col :span="22">
-                <el-select v-model="steps[idx]" placeholder="请选择数据源">
+                <el-select class="select-source" v-model="steps[idx]" placeholder="请选择数据源">
                   <template v-for="(item, sourceIdx) in sourceObjs">
                     <el-option :label="`数据源 ${sourceIdx + 1}`"
                       :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
@@ -54,10 +56,10 @@
         </template>
         <el-divider></el-divider>
 
-        <el-button  class="ope-btn" type="primary" round
-          @click="processorFlag = !processorFlag">
-          编辑处理函数
-        </el-button>
+       <el-form-item label-width="0">
+          <el-button  type="primary" round @click="processorFlag=!processorFlag">编辑处理函数</el-button>
+        </el-form-item>
+
         <template v-if="processorFlag">
           <el-input
             type="textarea" :rows="5"
@@ -65,9 +67,8 @@
         </template>
         <el-divider></el-divider>
 
-        <el-form-item>
+        <el-form-item label-width="0">
           <el-button type="primary" @click="onArrangement">开始排列</el-button>
-          <el-button @click="onReset">还原</el-button>
           <el-button @click="onClear">清空结果</el-button>
         </el-form-item>
 
@@ -213,13 +214,6 @@ export default {
         this.result = this.arrangementSteps(data);
       }
     },
-    onReset() {
-      this.sourceObjs = [];
-      this.steps = [];
-      this.result = '';
-      this.processor = 'args => args.join("")';
-      this.processorFlag = false;
-    },
     onClear() {
       this.result = '';
     },
@@ -228,12 +222,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  /deep/ .el-select {
+  .select-source {
     display: block;
-  }
-
-  .ope-btn {
-    margin-bottom: 20px;
   }
 
   .tips {
