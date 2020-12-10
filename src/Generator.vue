@@ -5,16 +5,16 @@
         @click="addSource">
         添加数据源
       </el-button>
-      <div v-if="sources.length">
-        <template v-for="(source, idx) in sources">
+      <div v-if="sourceObjs.length">
+        <template v-for="(item, idx) in sourceObjs">
           <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
             <el-row>
               <el-col :span="steps.length ? 18 : 21">
-                <el-input v-model="sources[idx]" @input="getSourceTip(idx)"></el-input>
+                <el-input v-model="item.value" @input="getSourceTip(idx)"></el-input>
               </el-col>
               <el-col :span="3" :offset="1" v-if="steps.length">
                 <span>可重复性：</span>
-                <el-switch v-model="sourceDupFlags[idx]"
+                <el-switch v-model="sourceObjs[idx].dup"
                   active-color="#13ce66">
                 </el-switch>
               </el-col>
@@ -24,7 +24,7 @@
               </el-col>
             </el-row>
             <div class="tips">
-              {{ sourcesTip[idx] || '内容为空，请输入内容' }}
+              {{ sourceObjs[idx].tips || '内容为空，请输入内容' }}
             </div>
           </el-form-item>
         </template>
@@ -39,7 +39,7 @@
             <el-row>
               <el-col :span="22">
                 <el-select v-model="steps[idx]" placeholder="请选择数据源">
-                  <template v-for="(source, sourceIdx) in sources">
+                  <template v-for="(item, sourceIdx) in sourceObjs">
                     <el-option :label="`数据源 ${sourceIdx + 1}`"
                       :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
                   </template>
@@ -90,9 +90,7 @@
 export default {
   data() {
     return {
-      sources: [],
-      sourcesTip: [],
-      sourceDupFlags: [],
+      sourceObjs: [],
       steps: [],
       form: {},
       result: [],
@@ -119,7 +117,7 @@ export default {
         const arr = [];
         result.forEach((p) => {
           data[s].forEach((c) => {
-            if (!this.sourceDupFlags[s] && p.includes(c)) {
+            if (!this.sourceObjs[s].dup && p.includes(c)) {
               return;
             }
             const temp = [];
@@ -135,17 +133,18 @@ export default {
       return result;
     },
     addSource() {
-      this.sources.push('');
-      this.sourcesTip.push('');
-      this.sourceDupFlags.push(true);
+      this.sourceObjs.push({
+        value: '',
+        tips: '',
+        sep: ',',
+        dup: true,
+      });
     },
     delSource(idx) {
-      this.sources.splice(idx, 1);
-      this.sourcesTip.splice(idx, 1);
-      this.sourceDupFlags.splice(idx, 1);
+      this.sourceObjs.splice(idx, 1);
     },
     addStep() {
-      const last = Math.min(this.steps.length, this.sources.length - 1);
+      const last = Math.min(this.steps.length, this.sourceObjs.length - 1);
       this.steps.push(last);
     },
     getSourceSep(str) {
@@ -171,27 +170,27 @@ export default {
       return sep || defaultSep;
     },
     getSourceTip(idx) {
-      const str = this.sources[idx];
+      const str = this.sourceObjs[idx].value;
       if (!str) {
-        this.sourcesTip[idx] = '';
+        this.sourceObjs[idx].tips = '';
         return;
       }
 
       const sep = this.getSourceSep(str);
-      this.sourcesTip[idx] = `分隔符是"${sep.label}"`;
+      this.sourceObjs[idx].sep = sep.value;
+      this.sourceObjs[idx].tips = `分隔符是"${sep.label}"`;
     },
     checkSource() {
       const data = [];
-      for (let i = 0; i < this.sources.length; i += 1) {
-        let element = this.sources[i];
+      for (let i = 0; i < this.sourceObjs.length; i += 1) {
+        let element = this.sourceObjs[i].value;
         element = element.trim();
-        element = element.replace(/\s*/g, '');
         if (element === '') {
           this.$alert(`数据源 ${i + 1} 的内容为空`);
           return [];
         }
 
-        const arr = element.split(',');
+        const arr = element.split(this.sourceObjs[i].sep);
         const set = [...new Set(arr)];
         if (set.length !== arr.length) {
           this.$alert(`数据源 ${i + 1} 的内容有重复字段`);
@@ -215,7 +214,7 @@ export default {
       }
     },
     onReset() {
-      this.sources = [''];
+      this.sourceObjs = [];
       this.steps = [];
       this.result = '';
       this.processor = 'args => args.join("")';
