@@ -2,15 +2,15 @@
   <div class="hello">
     <el-form ref="form" :model="form" label-width="80px" label-position="left">
       <el-button class="ope-btn" type="primary" round
-        @click="sources.push('');sourceDupFlags.push(true)">
+        @click="addSource">
         添加数据源
       </el-button>
       <div v-if="sources.length">
         <template v-for="(source, idx) in sources">
           <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
             <el-row>
-              <el-col :span="18">
-                <el-input v-model="sources[idx]"></el-input>
+              <el-col :span="steps.length ? 18 : 21">
+                <el-input v-model="sources[idx]" @input="getSourceTip(idx)"></el-input>
               </el-col>
               <el-col :span="3" :offset="1" v-if="steps.length">
                 <span>可重复性：</span>
@@ -20,9 +20,12 @@
               </el-col>
               <el-col :span="1" :offset="1">
                 <el-button type="danger" icon="el-icon-delete" circle
-                  @click="sources.splice(idx, 1);sourceDupFlags.splice(idx, 1)"></el-button>
+                  @click="delSource"></el-button>
               </el-col>
             </el-row>
+            <div class="tips">
+              {{ sourcesTip[idx] || '内容为空，请输入内容' }}
+            </div>
           </el-form-item>
         </template>
         <el-divider></el-divider>
@@ -88,6 +91,7 @@ export default {
   data() {
     return {
       sources: [],
+      sourcesTip: [],
       sourceDupFlags: [],
       steps: [],
       form: {},
@@ -130,9 +134,51 @@ export default {
       /* eslint-enable no-eval */
       return result;
     },
+    addSource() {
+      this.sources.push('');
+      this.sourcesTip.push('');
+      this.sourceDupFlags.push(true);
+    },
+    delSource(idx) {
+      this.sources.splice(idx, 1);
+      this.sourcesTip.splice(idx, 1);
+      this.sourceDupFlags.splice(idx, 1);
+    },
     addStep() {
       const last = Math.min(this.steps.length, this.sources.length - 1);
       this.steps.push(last);
+    },
+    getSourceSep(str) {
+      const defaultSep = {
+        label: '任意字符',
+        value: '',
+      };
+      const arr = [
+        {
+          label: '英文逗号',
+          value: ',',
+        },
+        {
+          label: '中文逗号',
+          value: '，',
+        },
+        {
+          label: '空格',
+          value: ' ',
+        },
+      ];
+      const sep = arr.find((item) => str.includes(item.value));
+      return sep || defaultSep;
+    },
+    getSourceTip(idx) {
+      const str = this.sources[idx];
+      if (!str) {
+        this.sourcesTip[idx] = '';
+        return;
+      }
+
+      const sep = this.getSourceSep(str);
+      this.sourcesTip[idx] = `分隔符是"${sep.label}"`;
     },
     checkSource() {
       const data = [];
@@ -189,6 +235,14 @@ export default {
 
   .ope-btn {
     margin-bottom: 20px;
+  }
+
+  .tips {
+    background-color: #f4f4f5;
+    color: #909399;
+    margin-top: 3px;
+    line-height: 20px;
+    padding: 5px;
   }
 
   .result-list {
