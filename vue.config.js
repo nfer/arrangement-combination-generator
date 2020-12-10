@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: 'arrangement-combination-generator',
+  publicPath: '/arrangement-combination-generator',
 };
