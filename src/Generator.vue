@@ -1,6 +1,10 @@
 <template>
   <div class="hello">
     <el-form ref="form" :model="form" label-width="80px" label-position="left">
+      <el-button class="ope-btn" type="primary" round
+        @click="sources.push('');sourceDupFlags.push(true)">
+        添加数据源
+      </el-button>
       <template v-for="(source, idx) in sources">
         <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
           <el-row>
@@ -20,10 +24,12 @@
           </el-row>
         </el-form-item>
       </template>
-      <el-button type="primary" round @click="sources.push('');sourceDupFlags.push(true)">
-        添加数据源</el-button>
       <el-divider></el-divider>
 
+      <el-button  class="ope-btn" type="primary" round
+        @click="addStep()">
+        添加步骤
+      </el-button>
       <template v-for="(step, idx) in steps">
         <el-form-item :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
           <el-row>
@@ -42,10 +48,13 @@
           </el-row>
         </el-form-item>
       </template>
-      <el-button type="primary" round @click="addStep()">添加步骤</el-button>
-      <el-button type="primary" round @click="processorFlag = !processorFlag">编辑处理函数</el-button>
+      <el-divider></el-divider>
+
+      <el-button  class="ope-btn" type="primary" round
+        @click="processorFlag = !processorFlag">
+        编辑处理函数
+      </el-button>
       <template v-if="processorFlag">
-        <el-divider></el-divider>
         <el-input
           type="textarea" :rows="5"
           v-model="processor"></el-input>
@@ -175,6 +184,10 @@ export default {
 <style lang="less" scoped>
   /deep/ .el-select {
     display: block;
+  }
+
+  .ope-btn {
+    margin-bottom: 20px;
   }
 
   .result-list {
