@@ -5,77 +5,79 @@
         @click="sources.push('');sourceDupFlags.push(true)">
         添加数据源
       </el-button>
-      <template v-for="(source, idx) in sources">
-        <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
-          <el-row>
-            <el-col :span="18">
-              <el-input v-model="sources[idx]"></el-input>
-            </el-col>
-            <el-col :span="3" :offset="1" v-if="steps.length">
-              <span>可重复性：</span>
-              <el-switch v-model="sourceDupFlags[idx]"
-                active-color="#13ce66">
-              </el-switch>
-            </el-col>
-            <el-col :span="1" :offset="1" v-if="sources.length > 1">
-              <el-button type="danger" icon="el-icon-delete" circle
-                @click="sources.splice(idx, 1);sourceDupFlags.splice(idx, 1)"></el-button>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </template>
-      <el-divider></el-divider>
-
-      <el-button  class="ope-btn" type="primary" round
-        @click="addStep()">
-        添加步骤
-      </el-button>
-      <template v-for="(step, idx) in steps">
-        <el-form-item :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
-          <el-row>
-            <el-col :span="22">
-              <el-select v-model="steps[idx]" placeholder="请选择数据源">
-                <template v-for="(source, sourceIdx) in sources">
-                  <el-option :label="`数据源 ${sourceIdx + 1}`"
-                    :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
-                </template>
-              </el-select>
-            </el-col>
-            <el-col :span="1" :offset="1">
-              <el-button type="danger" icon="el-icon-delete" circle
-                @click="steps.splice(idx, 1);"></el-button>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      </template>
-      <el-divider></el-divider>
-
-      <el-button  class="ope-btn" type="primary" round
-        @click="processorFlag = !processorFlag">
-        编辑处理函数
-      </el-button>
-      <template v-if="processorFlag">
-        <el-input
-          type="textarea" :rows="5"
-          v-model="processor"></el-input>
-      </template>
-      <el-divider></el-divider>
-
-      <el-form-item>
-        <el-button type="primary" @click="onArrangement">开始排列</el-button>
-        <el-button @click="onReset">还原</el-button>
-        <el-button @click="onClear">清空结果</el-button>
-      </el-form-item>
-
-      <div v-if="result.length">
+      <div v-if="sources.length">
+        <template v-for="(source, idx) in sources">
+          <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
+            <el-row>
+              <el-col :span="18">
+                <el-input v-model="sources[idx]"></el-input>
+              </el-col>
+              <el-col :span="3" :offset="1" v-if="steps.length">
+                <span>可重复性：</span>
+                <el-switch v-model="sourceDupFlags[idx]"
+                  active-color="#13ce66">
+                </el-switch>
+              </el-col>
+              <el-col :span="1" :offset="1">
+                <el-button type="danger" icon="el-icon-delete" circle
+                  @click="sources.splice(idx, 1);sourceDupFlags.splice(idx, 1)"></el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </template>
         <el-divider></el-divider>
-        <span>共计{{ result.length }}个</span>
-        <ul class="result-list">
-          <li
-            v-for="i in result"
-            :key="i"
-            class="result-item">{{ i }}</li>
-        </ul>
+
+        <el-button  class="ope-btn" type="primary" round
+          @click="addStep()">
+          添加步骤
+        </el-button>
+        <template v-for="(step, idx) in steps">
+          <el-form-item :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
+            <el-row>
+              <el-col :span="22">
+                <el-select v-model="steps[idx]" placeholder="请选择数据源">
+                  <template v-for="(source, sourceIdx) in sources">
+                    <el-option :label="`数据源 ${sourceIdx + 1}`"
+                      :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
+                  </template>
+                </el-select>
+              </el-col>
+              <el-col :span="1" :offset="1">
+                <el-button type="danger" icon="el-icon-delete" circle
+                  @click="steps.splice(idx, 1);"></el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </template>
+        <el-divider></el-divider>
+
+        <el-button  class="ope-btn" type="primary" round
+          @click="processorFlag = !processorFlag">
+          编辑处理函数
+        </el-button>
+        <template v-if="processorFlag">
+          <el-input
+            type="textarea" :rows="5"
+            v-model="processor"></el-input>
+        </template>
+        <el-divider></el-divider>
+
+        <el-form-item>
+          <el-button type="primary" @click="onArrangement">开始排列</el-button>
+          <el-button @click="onReset">还原</el-button>
+          <el-button @click="onClear">清空结果</el-button>
+        </el-form-item>
+
+        <div v-if="result.length">
+          <el-divider></el-divider>
+          <span>共计{{ result.length }}个</span>
+          <ul class="result-list">
+            <li
+              v-for="i in result"
+              :key="i"
+              class="result-item">{{ i }}</li>
+          </ul>
+        </div>
       </div>
     </el-form>
   </div>
@@ -85,11 +87,10 @@
 export default {
   data() {
     return {
-      sources: [''],
-      sourceDupFlags: [true],
+      sources: [],
+      sourceDupFlags: [],
       steps: [],
-      form: {
-      },
+      form: {},
       result: [],
       processorFlag: false,
       processor: 'args => args.join("")',
