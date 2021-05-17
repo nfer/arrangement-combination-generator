@@ -14,12 +14,4 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
   },
-  settings: {
-    'import/resolver': {
-      node: {
-        paths: ['src'],
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      },
-    },
-  },
 };
