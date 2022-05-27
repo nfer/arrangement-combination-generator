@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <h1>排列组合生成器</h1>
-    <Generator />
+    <ArrangementCombinationGenerator />
   </div>
 </template>
 
 <script>
-import Generator from './Generator.vue';
+import ArrangementCombinationGenerator from './ArrangementCombinationGenerator.vue';
 
 export default {
   name: 'app',
   components: {
-    Generator,
+    ArrangementCombinationGenerator,
   },
 };
 </script>
