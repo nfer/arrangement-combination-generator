@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import ElementUI from 'element-ui';
+import ElementPlus from 'element-plus';
 import GitVersion from 'show-git-version';
-import 'element-ui/lib/theme-chalk/index.css';
+import 'element-plus/dist/index.css';
 import App from './App.vue';
 
 GitVersion.trace();
 
-Vue.use(ElementUI);
+Vue.use(ElementPlus);
 
 Vue.config.productionTip = false;
 
