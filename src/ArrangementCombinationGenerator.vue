@@ -7,28 +7,27 @@
       </el-form-item>
 
       <div v-if="sourceObjs.length">
-        <template v-for="(item, idx) in sourceObjs">
-          <el-form-item :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
-            <el-row>
-              <el-col :span="steps.length ? 18 : 21">
-                <el-input v-model="item.value" @input="getSourceTip(idx)"></el-input>
-              </el-col>
-              <el-col :span="3" :offset="1" v-if="steps.length">
-                <span>可重复性：</span>
-                <el-switch v-model="sourceObjs[idx].dup"
-                  active-color="#13ce66">
-                </el-switch>
-              </el-col>
-              <el-col :span="1" :offset="1">
-                <el-button type="danger" icon="el-icon-delete" circle
-                  @click="delSource"></el-button>
-              </el-col>
-            </el-row>
-            <div class="tips">
-              {{ sourceObjs[idx].tips || '内容为空，请输入内容' }}
-            </div>
-          </el-form-item>
-        </template>
+        <el-form-item
+          v-for="(item, idx) in sourceObjs" :label="`数据源 ${idx + 1}:`" :key="`source-${idx}`">
+          <el-row>
+            <el-col :span="steps.length ? 18 : 21">
+              <el-input v-model="item.value" @input="getSourceTip(idx)"></el-input>
+            </el-col>
+            <el-col :span="3" :offset="1" v-if="steps.length">
+              <span>可重复性：</span>
+              <el-switch v-model="sourceObjs[idx].dup"
+                active-color="#13ce66">
+              </el-switch>
+            </el-col>
+            <el-col :span="1" :offset="1">
+              <el-button type="danger" icon="el-icon-delete" circle
+                @click="delSource"></el-button>
+            </el-col>
+          </el-row>
+          <div class="tips">
+            {{ sourceObjs[idx].tips || '内容为空，请输入内容' }}
+          </div>
+        </el-form-item>
         <el-divider></el-divider>
 
         <el-form-item label-width="0">
@@ -36,24 +35,20 @@
           <el-button v-if="steps.length" type="danger" @click="steps = []">重置步骤</el-button>
         </el-form-item>
 
-        <template v-for="(step, idx) in steps">
-          <el-form-item :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
-            <el-row>
-              <el-col :span="22">
-                <el-select class="select-source" v-model="steps[idx]" placeholder="请选择数据源">
-                  <template v-for="(item, sourceIdx) in sourceObjs">
-                    <el-option :label="`数据源 ${sourceIdx + 1}`"
-                      :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
-                  </template>
-                </el-select>
-              </el-col>
-              <el-col :span="1" :offset="1">
-                <el-button type="danger" icon="el-icon-delete" circle
-                  @click="steps.splice(idx, 1);"></el-button>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </template>
+        <el-form-item v-for="(step, idx) in steps" :label="`数据源 ${idx + 1}:`" :key="`step-${idx}`">
+          <el-row>
+            <el-col :span="22">
+              <el-select class="select-source" v-model="steps[idx]" placeholder="请选择数据源">
+                <el-option v-for="(item, sourceIdx) in sourceObjs" :label="`数据源 ${sourceIdx + 1}`"
+                  :key="`step-source-${sourceIdx}`" :value="sourceIdx"></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1" :offset="1">
+              <el-button type="danger" icon="el-icon-delete" circle
+                @click="steps.splice(idx, 1);"></el-button>
+            </el-col>
+          </el-row>
+        </el-form-item>
         <el-divider></el-divider>
 
        <el-form-item label-width="0">
