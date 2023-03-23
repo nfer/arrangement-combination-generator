@@ -13,7 +13,7 @@ module.exports = {
         GIT_BRANCH: JSON.stringify(branch),
         GIT_COMMIT: JSON.stringify(commit),
         PROJ_VERSION: JSON.stringify(Package.version),
-        BUILD_TIME: JSON.stringify(new Date().toString()),
+        BUILD_TIME: JSON.stringify(new Date().toString({ timeZone: 'Asia/Beijing' })),
       });
       return definitions;
     });
