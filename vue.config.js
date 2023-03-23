@@ -8,7 +8,7 @@ module.exports = {
       const gitRevisionPlugin = new GitRevisionPlugin({ branch: true });
       const commit = gitRevisionPlugin.commithash().substring(0, 8);
       const branch = gitRevisionPlugin.branch();
-      const buildTime = new Date().toString({ timeZone: 'Asia/Beijing' });
+      const buildTime = `${new Date().toLocaleString({ timeZone: 'Asia/Beijing' })} GMT+0800`;
       console.log(buildTime, commit);
       Object.assign(definitions[0]['process.env'], {
         GIT_VERSION: JSON.stringify(`${branch}-${commit}`),
