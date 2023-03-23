@@ -20,6 +20,11 @@ jobs:
         with:
           node-version: 16
 
+      - name: Setup timezone
+        uses: zcong1993/setup-timezone@master
+        with:
+          timezone: Asia/Shanghai
+
       - name: Install and Build 🔧
         run: |
           npm install
