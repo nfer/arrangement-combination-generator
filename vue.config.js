@@ -6,14 +6,16 @@ module.exports = {
   chainWebpack: (config) => {
     config.plugin('define').tap((definitions) => {
       const gitRevisionPlugin = new GitRevisionPlugin({ branch: true });
-      const commit = gitRevisionPlugin.commithash().substr(0, 8);
+      const commit = gitRevisionPlugin.commithash().substring(0, 8);
       const branch = gitRevisionPlugin.branch();
+      const buildTime = new Date().toString({ timeZone: 'Asia/Beijing' });
+      console.log(buildTime, commit);
       Object.assign(definitions[0]['process.env'], {
         GIT_VERSION: JSON.stringify(`${branch}-${commit}`),
         GIT_BRANCH: JSON.stringify(branch),
         GIT_COMMIT: JSON.stringify(commit),
         PROJ_VERSION: JSON.stringify(Package.version),
-        BUILD_TIME: JSON.stringify(new Date().toString({ timeZone: 'Asia/Beijing' })),
+        BUILD_TIME: JSON.stringify(buildTime),
       });
       return definitions;
     });
